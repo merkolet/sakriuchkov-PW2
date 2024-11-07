@@ -3,7 +3,6 @@
 //  sakriuchkovPW2
 //
 //  Created by Sergey on 29.10.2024.
-//
 
 import UIKit
 
@@ -19,7 +18,7 @@ final class WishMakerViewController: UIViewController {
         static let blue: String = "Blue"
         
         static let stackRaius: CGFloat = 20
-        static let stackBottom: CGFloat = -40
+        static let stackBottom: CGFloat = -20
         static let stackLeading: CGFloat = 20
         
         static let titleViewFont: CGFloat = 35
@@ -30,10 +29,20 @@ final class WishMakerViewController: UIViewController {
         static let descriptionViewLeading: CGFloat = 20
         static let descriptionViewTopAnchor: CGFloat = 20
         
+        // MARK: HW-3
+        static let buttonHeight: CGFloat = 40
+        static let buttonBottom: CGFloat = 15
+        static let buttonSide: CGFloat = 20
+        static let buttonText: String = "My wishes"
+        static let buttonRadius: CGFloat = 20
+        
     }
     
     private let titleView = UILabel()
     private let descriptionView = UILabel()
+    // MARK: HW-3
+    private let addWishButton: UIButton = UIButton(type: .system)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +54,8 @@ final class WishMakerViewController: UIViewController {
         view.backgroundColor = .systemCyan
         configureTitle()
         configureDescription()
+        addWishButtonPressed()
+        configureAddWishButton()
         configureSliders()
     }
     
@@ -105,7 +116,7 @@ final class WishMakerViewController: UIViewController {
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.stackLeading),
-            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: Constants.stackBottom)
+            stack.bottomAnchor.constraint(equalTo: addWishButton.topAnchor, constant: Constants.stackBottom)
         ])
         
         sliderRed.valueChanged = { [weak self] value in
@@ -133,7 +144,29 @@ final class WishMakerViewController: UIViewController {
         }
     }
     
+    // MARK: HW-3
+    private func configureAddWishButton() {
+        view.addSubview(addWishButton)
+        addWishButton.setHeight(Constants.buttonHeight)
+        addWishButton.pinBottom(to: view, Constants.buttonBottom)
+        addWishButton.pinHorizontal(to: view, Constants.buttonSide)
+        
+        addWishButton.backgroundColor = .white
+        addWishButton.setTitleColor(.systemPink, for: .normal)
+        addWishButton.setTitle(Constants.buttonText, for: .normal)
+        
+        addWishButton.layer.cornerRadius = Constants.buttonRadius
+        addWishButton.addTarget(self, action: #selector(addWishButtonPressed), for: .touchUpInside)
+    }
+    
+    // MARK: HW-3
+    @objc
+    private func addWishButtonPressed() {
+        present(WishStoringViewController(), animated: true)
+    }
+    
 }
+
 
 // MARK: Создание слайдеров.
 final class CustomSlider: UIView {
