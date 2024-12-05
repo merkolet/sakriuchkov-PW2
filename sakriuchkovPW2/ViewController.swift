@@ -18,7 +18,7 @@ final class WishMakerViewController: UIViewController {
         static let blue: String = "Blue"
         
         static let stackRaius: CGFloat = 20
-        static let stackBottom: CGFloat = -20
+        static let stackBottom: CGFloat = -10
         static let stackLeading: CGFloat = 20
         
         static let titleViewFont: CGFloat = 35
@@ -31,10 +31,15 @@ final class WishMakerViewController: UIViewController {
         
         // MARK: HW-3
         static let buttonHeight: CGFloat = 40
-        static let buttonBottom: CGFloat = 15
+        static let buttonBottom: CGFloat = 50
         static let buttonSide: CGFloat = 20
         static let buttonText: String = "My wishes"
-        static let buttonRadius: CGFloat = 20
+        static let buttonRadius: CGFloat = 19
+        
+        // MARK: HW-4
+        static let spacing: CGFloat = 10
+        static let scheduleButtonText: String = "Schedule wishes"
+        static let buttonStackBottom: CGFloat = 7
         
     }
     
@@ -42,6 +47,10 @@ final class WishMakerViewController: UIViewController {
     private let descriptionView = UILabel()
     // MARK: HW-3
     private let addWishButton: UIButton = UIButton(type: .system)
+    
+    // MARK: HW-4
+    private let scheduleWishesButton: UIButton = UIButton(type: .system)
+    private let actionStack: UIStackView = UIStackView()
 
     
     override func viewDidLoad() {
@@ -54,8 +63,7 @@ final class WishMakerViewController: UIViewController {
         view.backgroundColor = .systemCyan
         configureTitle()
         configureDescription()
-        addWishButtonPressed()
-        configureAddWishButton()
+        configureActionStack()
         configureSliders()
     }
     
@@ -146,9 +154,8 @@ final class WishMakerViewController: UIViewController {
     
     // MARK: HW-3
     private func configureAddWishButton() {
-        view.addSubview(addWishButton)
         addWishButton.setHeight(Constants.buttonHeight)
-        addWishButton.pinBottom(to: view, Constants.buttonBottom)
+        addWishButton.pinTop(to: actionStack, Constants.buttonBottom)
         addWishButton.pinHorizontal(to: view, Constants.buttonSide)
         
         addWishButton.backgroundColor = .white
@@ -159,10 +166,49 @@ final class WishMakerViewController: UIViewController {
         addWishButton.addTarget(self, action: #selector(addWishButtonPressed), for: .touchUpInside)
     }
     
+    // MARK: HW-4
+    private func configureScheduleMissions() {
+        scheduleWishesButton.setHeight(Constants.buttonHeight)
+        scheduleWishesButton.pinBottom(to: actionStack, 1
+        )
+        scheduleWishesButton.pinHorizontal(to: view, Constants.buttonSide)
+        
+        scheduleWishesButton.backgroundColor = .white
+        scheduleWishesButton.setTitleColor(.systemPink, for: .normal)
+        scheduleWishesButton.setTitle(Constants.scheduleButtonText, for: .normal)
+        scheduleWishesButton.layer.cornerRadius = Constants.buttonRadius
+        scheduleWishesButton.addTarget(self, action: #selector(scheduleWishButtonPressed), for: .touchUpInside)
+        
+    }
+    
+    // MARK: HW-4
+    private func configureActionStack() {
+        actionStack.axis = .vertical
+        view.addSubview(actionStack)
+        actionStack.spacing = Constants.spacing
+        
+        for button in [addWishButton, scheduleWishesButton] {
+            actionStack.addArrangedSubview(button)
+        }
+        
+        configureAddWishButton()
+        configureScheduleMissions()
+        
+        actionStack.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor, Constants.buttonStackBottom)
+        actionStack.pinHorizontal(to: view, Constants.stackLeading)
+    }
+    
     // MARK: HW-3
     @objc
     private func addWishButtonPressed() {
         present(WishStoringViewController(), animated: true)
+    }
+    
+    // MARK: HW-4
+    @objc
+    private func scheduleWishButtonPressed() {
+        let vc = WishCalendarViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
