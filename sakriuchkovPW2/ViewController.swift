@@ -52,7 +52,6 @@ final class WishMakerViewController: UIViewController {
     private let scheduleWishesButton: UIButton = UIButton(type: .system)
     private let actionStack: UIStackView = UIStackView()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()

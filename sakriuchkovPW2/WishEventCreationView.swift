@@ -16,6 +16,9 @@ final class WishEventCreationView: UIViewController {
     private let endDatePicker = UIDatePicker()
     private let saveButton = UIButton(type: .system)
     
+    // MARK: - CalendarManager
+    private let calendarManager = CalendarManager()
+    
     // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,18 +79,16 @@ final class WishEventCreationView: UIViewController {
         let startDate = startDatePicker.date
         let endDate = endDatePicker.date
         
-        let newEvent = WishEventModel(title: title, description: description, startDate: (startDate), endDate: (endDate))
-        
-        // Сохранение в CoreData или массив (добавьте вашу логику)
-        print("Новое событие: \(newEvent)")
+        // Логика для добавления события в системный календарь
+        let calendarEvent = CalendarEventModel(title: title, startDate: startDate, endDate: endDate, note: description)
+        calendarManager.create(eventModel: calendarEvent) { isCreated in
+            if isCreated {
+                print("Событие успешно сохранено в календарь!")
+            } else {
+                print("Не удалось сохранить событие в календарь.")
+            }
+        }
         
         dismiss(animated: true)
     }
-    
-    @objc private func openEventCreationView() {
-        let eventCreationVC = WishEventCreationView()
-        present(eventCreationVC, animated: true)
-    }
-
 }
-
